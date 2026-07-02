@@ -38,7 +38,8 @@ nav:
               - Pipes: c/processos/pipes.md
               - FIFOs: c/processos/fifos.md
               - Message Queues: c/processos/message_queues.md
-              - Sockets: c/processos/unix_domain_sockets.md
+              - Unix Domain Sockets: c/processos/unix_domain_sockets.md
+              - TCP Sockets: c/processos/tcp_sockets.md
           - Arquivos em C: c/arquivos.md
           - OpenMP: c/openmp.md
       - Go:
