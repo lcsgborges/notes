@@ -29,6 +29,7 @@ nav:
           - Camadas de rede: fundamentos/redes/camadas.md
   - Linguagens de Programação:
       - C:
+          - Arquivos em C: c/arquivos.md
           - Processos e IPC:
               - Introdução: c/processos/introducao.md
               - Memória de processo: c/processos/memoria.md
@@ -38,9 +39,10 @@ nav:
               - Pipes: c/processos/pipes.md
               - FIFOs: c/processos/fifos.md
               - Message Queues: c/processos/message_queues.md
+              - Shared Memory: c/processos/shared_memory.md
               - Unix Domain Sockets: c/processos/unix_domain_sockets.md
               - TCP Sockets: c/processos/tcp_sockets.md
-          - Arquivos em C: c/arquivos.md
+          - Threads: c/threads.md
           - OpenMP: c/openmp.md
       - Go:
           - Primeiros passos: go/go.md
