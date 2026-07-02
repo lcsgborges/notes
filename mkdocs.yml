@@ -29,6 +29,7 @@ nav:
           - Camadas de rede: fundamentos/redes/camadas.md
   - Linguagens de Programação:
       - C:
+          - Ponteiros: c/ponteiros.md
           - Arquivos em C: c/arquivos.md
           - Processos e IPC:
               - Introdução: c/processos/introducao.md
