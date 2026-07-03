@@ -27,6 +27,8 @@ nav:
       - Fundamentos de Rede:
           - Primeiros passos: fundamentos/redes/introducao.md
           - Camadas de rede: fundamentos/redes/camadas.md
+  - Estruturas de Dados e Algoritmos:
+      - Arrays: eda/arrays.md
   - Linguagens de Programação:
       - C:
           - Ponteiros: c/ponteiros.md
