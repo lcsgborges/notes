@@ -1,28 +1,77 @@
-# Home
+# Dev Notes
 
-Bem-vindo(a) à minha base de anotações sobre programação, desenvolvimento e tecnologia.
+Uma base de consulta sobre programação, desenvolvimento de software e tecnologia. Aqui você encontra anotações teóricas, exemplos práticos e exercícios organizados por tema.
 
-Este espaço foi criado para armazenar conteúdos de estudo, referências rápidas, exemplos práticos e observações sobre linguagens de programação, bibliotecas, frameworks, ferramentas, DevOps e assuntos relacionados ao desenvolvimento de software.
+## Comece por aqui
 
-## Objetivo
+Se você está explorando o conteúdo pela primeira vez, estes são bons pontos de partida:
 
-A ideia deste material é servir como uma base pessoal de consulta e aprendizado contínuo, reunindo anotações que possam ser revisitadas sempre que necessário.
+- [Fundamentos de rede](fundamentos/redes/introducao.md): conceitos iniciais sobre comunicação, endereçamento e dispositivos de rede.
+- [Arrays](eda/arrays.md): introdução à estrutura de dados e à sua representação na memória.
+- [Primeiros passos com Go](go/go.md): fundamentos da linguagem Go.
+- [Primeiros passos com Java](java/introducao/introducao.md): sintaxe e conceitos iniciais da linguagem Java.
 
 ## Conteúdos
 
-Aqui serão organizadas anotações sobre temas como:
+### Fundamentos da Computação
 
-- Linguagens de programação.
-- Bibliotecas e *frameworks*.
-- Bancos de dados.
-- DevOps.
-- Git e GitHub.
-- APIs.
-- Boas práticas.
-- Comandos úteis.
-- Exemplos de código.
-- Soluções para problemas comuns.
+#### Redes
 
-## Organização
+- [Fundamentos de rede](fundamentos/redes/introducao.md)
+- [Camadas de rede](fundamentos/redes/camadas.md)
 
-As anotações serão separadas por categorias para facilitar a navegação e a consulta.
+### Estruturas de Dados e Algoritmos
+
+- [Arrays](eda/arrays.md)
+
+### Linguagens de Programação
+
+#### C
+
+**Fundamentos**
+
+- [Ponteiros](c/ponteiros.md)
+- [Arquivos em C](c/arquivos.md)
+
+**Processos e comunicação entre processos**
+
+- [Programa, processo e kernel](c/processos/introducao.md)
+- [Memória de processo](c/processos/memoria.md)
+- [Descritores de arquivo](c/processos/fd.md)
+- [`fork()`, `wait()`, família `exec` e ciclo de vida do processo](c/processos/fork.md)
+- [Sinais](c/processos/signals.md)
+- [Pipes](c/processos/pipes.md)
+- [FIFOs](c/processos/fifos.md)
+- [Message Queues](c/processos/message_queues.md)
+- [Shared Memory](c/processos/shared_memory.md)
+- [Unix Domain Sockets](c/processos/unix_domain_sockets.md)
+- [TCP Sockets](c/processos/tcp_sockets.md)
+
+**Concorrência e paralelismo**
+
+- [Threads](c/threads.md)
+- [OpenMP](c/openmp.md)
+
+#### Go
+
+- [Primeiros passos](go/go.md)
+- [Exercícios básicos](go/exercicios_basicos_go.md)
+
+#### Java
+
+- [Primeiros passos](java/introducao/introducao.md)
+- [Exercícios: primeiros passos](java/introducao/exercicios_basicos.md)
+- [Orientação a objetos](java/orientacao-a-objetos/poo1.md)
+- [Exercícios: orientação a objetos](java/orientacao-a-objetos/exercicios_poo1.md)
+- [Arrays e listas](java/estrutura-de-dados/arrays_e_listas.md)
+
+#### Python
+
+- [Anotações de tipo](python/types-hints-py.md)
+- [SQLAlchemy](python/sqlalchemy.md)
+- [Alembic](python/alembic.md)
+- [Pillow](python/pillow.md)
+
+### DevOps
+
+- [Docker](devops/docker.md)
