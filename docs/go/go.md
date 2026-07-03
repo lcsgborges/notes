@@ -21,7 +21,7 @@ Em Go, um módulo é uma coleção de pacotes versionados em conjunto. Ele é de
 
 O arquivo define o caminho do módulo, registra dependências e inclui a versão da linguagem Go adotada pelo módulo.
 
-Quando o módulo será publicado, normalmente usamos o caminho pelo qual ele poderá ser importado. Por exemplo: `go mod init github.com/lcsgborges/project-go`.
+Quando o módulo for publicado, normalmente usaremos o caminho pelo qual ele poderá ser importado. Por exemplo: `go mod init github.com/lcsgborges/project-go`.
 
 ### Pacotes
 

@@ -1,6 +1,6 @@
-# Shared Memory
+# Memória compartilhada
 
-**Shared Memory** é um mecanismo de IPC onde dois ou mais processos acessam a **mesma região de memória**.
+A **memória compartilhada** (*shared memory*) é um mecanismo de IPC em que dois ou mais processos acessam a **mesma região de memória**.
 
 A ideia é:
 
@@ -13,60 +13,60 @@ A ideia é:
     B --> C
 ```
 
-Aqui os processos **não enviam dados através de `read()`/`write()`. Eles acessam diretamente uma área de memória compartilhada.
+Aqui, os processos não enviam dados por meio de `read()` ou `write()`. Eles acessam diretamente uma área de memória compartilhada.
 
-## O problema que Shared Memory resolve
+## O problema que a memória compartilhada resolve
 
 Normalmente, processos são isolados. Se temos `int x = 10` no **Processo A**, o **Processo B** não consegue acessar esse `x`.
 
-Isso é segurança e isolamento, mas às vezes queremos que dois processos compartilhem dados rapidamente. Exemplo:
+Isso oferece segurança e isolamento, mas, às vezes, queremos que dois processos compartilhem dados rapidamente. Exemplos:
 
-- Um processo produz dados, outro processo consome dados
-- Um processo escreve estado atual, outro processo lê esse estado
-- Vários processos acessam uma tabela comum
+- Um processo produz dados, e outro os consome.
+- Um processo escreve o estado atual, e outro lê esse estado.
+- Vários processos acessam uma tabela comum.
 
-Com `pipe`/`socket`/`message queue`, os dados passam pelo kernel em forma de bytes ou mensagens. Com `shared memory`, os processos acessam a mesma região diretamente.
+Com *pipes*, *sockets* ou filas de mensagens, os dados passam pelo kernel na forma de bytes ou mensagens. Com a memória compartilhada, os processos acessam diretamente a mesma região.
 
-### Por quê Shared Memory é rápida?
+### Por que a memória compartilhada é rápida?
 
-Porque evita ficar copiando dados entre processos. Isso é muito eficiente para grandes volumes de dados.
+Porque evita cópias frequentes de dados entre processos. Isso é muito eficiente para grandes volumes de dados.
 
 ## O grande problema: sincronização
 
-Shared memory é rápida, mas perigosa. Imagine:
+A memória compartilhada é rápida, mas exige cuidado. Imagine:
 
 ```text
-Processo A está escrevendo uma struct
-Processo B lê no meio da escrita
+Processo A está escrevendo uma struct.
+Processo B lê durante a escrita.
 ```
 
-O processo B pode ver dados incompletos. Então a regra é: **shared memory quase sempre precisa de sincronização**. Normalmente usamos:
+O processo B pode ver dados incompletos. Portanto, a regra é: **a memória compartilhada quase sempre precisa de sincronização**. Normalmente, usamos:
 
-- semáforos
-- mutexes compartilhados
-- futexes
-- cond vars compartilhadas
-- spinlocks
+- Semáforos.
+- *Mutexes* compartilhados.
+- *Futexes*.
+- Variáveis de condição compartilhadas.
+- *Spinlocks*.
 
-## Formas comuns de Shared Memory em C/Linux
+## Formas comuns de memória compartilhada em C e Linux
 
 As principais formas são:
 
-1. POSIX Shared Memory:
-    - `shm_open()`
-    - `ftruncate()`
-    - `mmap()`
-2. `mmap()` anônimo com MAP_SHARED
-    - útil entre pai e filho após `fork()`
-3. System V Shared Memory
-    - `shmget()`
-    - `shmat()`
-    - `shmdt()`
-    - `shmctl()`
+1. Memória compartilhada POSIX:
+    - `shm_open()`.
+    - `ftruncate()`.
+    - `mmap()`.
+2. `mmap()` anônimo com `MAP_SHARED`:
+    - Útil entre pai e filho após `fork()`.
+3. Memória compartilhada System V:
+    - `shmget()`.
+    - `shmat()`.
+    - `shmdt()`.
+    - `shmctl()`.
 
-A mais limpa é a **POSIX Shared Memory**.
+A forma mais simples é a **memória compartilhada POSIX**.
 
-## Fluxo POSIX Shared Memory
+## Fluxo da memória compartilhada POSIX
 
 O processo que cria a memória faz:
 
@@ -90,11 +90,11 @@ munmap()
 close()
 ```
 
-A ideia:
+A finalidade de cada chamada é:
 
-- `shm_open()`: cria/abre um objeto de memória compartilhada
-- `ftruncate()`: define o tamanho
-- `mmap()`: mapeia esse objeto no espaço de memória do processo.
+- `shm_open()`: cria ou abre um objeto de memória compartilhada.
+- `ftruncate()`: define o tamanho do objeto.
+- `mmap()`: mapeia o objeto no espaço de memória do processo.
 
 O ponto mais importante é `mmap()`. Ele faz uma região aparecer dentro da memória virtual do processo.
 
@@ -130,7 +130,7 @@ int main(void) {
         return 1;
     }
 
-    if (ftruncate(fd, SHM_NAME) == -1) {
+    if (ftruncate(fd, SHM_SIZE) == -1) {
         perror("ftruncate");
         close(fd);
         return 1;
@@ -150,7 +150,7 @@ int main(void) {
 
     printf("Writer escreveu: %s\n", msg);
 
-    munmap(str, SHM_SIZE);
+    munmap(ptr, SHM_SIZE);
     
     close(fd);
     return 0;
@@ -170,7 +170,7 @@ int main(void) {
 #define SHM_SIZE 4096
 
 int main(void) {
-    int fd = shm_open(SHM_NAME, O_RDONLY, 0666);
+    int fd = shm_open(SHM_NAME, O_RDONLY);
 
     if (fd == -1) {
         perror("shm_open");
@@ -187,23 +187,23 @@ int main(void) {
 
     printf("Reader leu: %s\n", (char *)ptr);
 
-    munmap(ptr, SHM_SIZE); // Desfaz o mapeamento
+    munmap(ptr, SHM_SIZE); // Desfaz o mapeamento.
     close(fd);
 
     // Remove o objeto de shared memory do sistema.
-    // Faça isso quando não precisar mais dele
+    // Faça isso quando não precisar mais dele.
     shm_unlink(SHM_NAME);
     return 0;
 }
 ```
 
-## `shm_open()` retorna file descriptor
+## `shm_open()` retorna um descritor de arquivo
 
 ```c
 int fd = shm_open(...)
 ```
 
-Ele retorna um file descriptor, parecido com `open()`. Mas esse `fd` representa um **objeto de memória compartilhada**, não um arquivo comum. Depois usamos esse `fd` no `mmap()`.
+Essa função retorna um descritor de arquivo, de forma semelhante a `open()`. Entretanto, esse `fd` representa um **objeto de memória compartilhada**, e não um arquivo comum. Depois, usamos o descritor em `mmap()`.
 
 ```mermaid
     flowchart LR
@@ -211,14 +211,14 @@ Ele retorna um file descriptor, parecido com `open()`. Mas esse `fd` representa 
     B[fd do objeto de shared memory]
     C[mmap()]
     D[ponteiro para a memória compartilhada]
-    A -> B
-    B -> C
-    C -> D
+    A --> B
+    B --> C
+    C --> D
 ```
 
 ## `ftruncate()` define o tamanho
 
-Quando criamos um objeto com `shm_open()`, ele pode ter tamanho 0. Então precisamos definir o tamanho:
+Quando criamos um objeto com `shm_open()`, ele pode ter tamanho zero. Portanto, precisamos definir seu tamanho:
 
 ```c
 ftruncate(fd, SHM_SIZE);
@@ -226,9 +226,9 @@ ftruncate(fd, SHM_SIZE);
 
 Sem isso, o `mmap()` pode falhar ou podemos acessar memória inválida.
 
-- `shm_open()`: cria o objeto
-- `ftruncate()`: define o tamanho
-- `mmap()`: coloca esse objeto na memória do processo
+- `shm_open()`: cria o objeto.
+- `ftruncate()`: define o tamanho.
+- `mmap()`: coloca o objeto na memória do processo.
 
 ## `mmap()` é o centro da ideia
 
@@ -240,12 +240,12 @@ void *ptr = mmap(NULL, SHM_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 
 Significa:
 
-- `NULL`: kernel escolhe o endereço virtual
-- `SHM_SIZE`: tamanho da região
-- `PROT_READ | PROT_WRITE`: posso ler e escrever
-- `MAP_SHARED`: alterações são compartilhadas com outros processos
-- `fd`: objeto que será mapeado
-- `0`: offset inicial
+- `NULL`: o kernel escolhe o endereço virtual.
+- `SHM_SIZE`: indica o tamanho da região.
+- `PROT_READ | PROT_WRITE`: permite leitura e escrita.
+- `MAP_SHARED`: torna as alterações visíveis para outros processos.
+- `fd`: indica o objeto que será mapeado.
+- `0`: indica o deslocamento (*offset*) inicial.
 
 O retorno é um ponteiro `void *ptr`. Depois disso, usamos como memória comum:
 
@@ -258,11 +258,11 @@ strcpy(mem, "texto");
 ## `MAP_SHARED` vs `MAP_PRIVATE`
 
 - `MAP_SHARED`: alterações são visíveis para outros processos.
-- `MAP_PRIVATE`: alterações são privadas do processo (copy-on-write)
+- `MAP_PRIVATE`: alterações são privadas do processo (*copy-on-write*).
 
 Se usar `MAP_PRIVATE`, cada processo pode ver sua própria cópia modificada.
 
-## Shared Memory com structs
+## Memória compartilhada com *structs*
 
 Vamos compartilhar uma struct:
 
@@ -364,7 +364,7 @@ int main(void) {
     printf("Valor: %.2f\n", dados->valor);
     printf("Status: %s\n", dados->status);
 
-    munmap(dados, sizeof(Dados)); // Desfaz o mapeamento
+    munmap(dados, sizeof(Dados)); // Desfaz o mapeamento.
     close(fd);
     shm_unlink(SHM_NAME);
 
@@ -372,16 +372,14 @@ int main(void) {
 }
 ```
 
+Na memória compartilhada, prefira:
 
+- *Arrays* fixos.
+- Inteiros.
+- Números de ponto flutuante.
+- *Structs* simples.
+- Deslocamentos em vez de ponteiros.
 
-Em Shared Memory, prefira:
+Como um ponteiro é um endereço virtual de um processo, seu valor no processo A não aponta necessariamente para a mesma região no processo B.
 
-- Arrays Fixos
-- Inteiros
-- Floats/Doubles
-- Structs Simples
-- Offsets em vez de ponteiros
-
-Uma vez que ponteiro é endereço virtual do processo, no Processo A não aponta necessariamente para o mesmo lugar no processo B.
-
-Regra: **Não compartilhe ponteiros crus entre processos. Compartilhe dados**.
+Regra: **não compartilhe ponteiros brutos entre processos; compartilhe dados.**

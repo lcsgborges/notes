@@ -1,30 +1,30 @@
-# Message Queues
+# Filas de mensagens
 
-Uma **Message Queue** é um mecanismo de IPC onde processos trocam dados através de uma **fila de mensagens mantida pelo kernel**. A diferença principal para `pipe` é que `pipe` mantém **bytes contínuos**, já `message queues` mantém mensagens separadas, ou seja, em `pipe` precisamos criar um protocolo/mecanismo para separar mensagens, já em `message queues`, **cada envio já é uma mensagem separada**.
+Uma **fila de mensagens** (*message queue*) é um mecanismo de IPC em que os processos trocam dados por meio de uma **fila mantida pelo kernel**. Diferentemente de um *pipe*, que transporta um fluxo contínuo de bytes, uma fila preserva os limites entre as mensagens: **cada envio corresponde a uma mensagem separada**.
 
-Dessa forma, um **produtor** envia mensagens e um **consumidor** recebe mensagens. Isso é util quando queremos:
+Dessa forma, um **produtor** envia mensagens, e um **consumidor** as recebe. Esse mecanismo é útil quando precisamos de:
 
-- tarefas discretas
-- comandos
-- eventos
-- mensagens independentes
-- produtor e consumidor desacoplados
+- Tarefas discretas.
+- Comandos.
+- Eventos.
+- Mensagens independentes.
+- Produtor e consumidor desacoplados.
 
-## Message Queue vs Pipe
+## Fila de mensagens e *pipe*
 
 ### Pipe
 
-- fluxo de bytes
-- não preserva mensagens
-- normalmente lido na ordem dos bytes
-- bom para streaming
+- Fluxo de bytes.
+- Não preserva os limites entre as mensagens.
+- Normalmente, é lido na ordem dos bytes.
+- É adequado para *streaming*.
 
 ### Message Queue
 
-- fila de mensagens
-- preserva fronteira das mensagens
-- pode ter prioridade
-- bom para tarefas/eventos/comandos
+- Fila de mensagens.
+- Preserva os limites entre as mensagens.
+- Pode trabalhar com prioridades.
+- É adequada para tarefas, eventos e comandos.
 
 Exemplo:
 
@@ -37,57 +37,57 @@ Mensagem 1: "ADD 2 3"
 Mensagem 2: "SUB 10 4"
 ```
 
-## POSIX Message Queues
+## Filas de mensagens POSIX
 
-API mais morderna e mais limpa:
+Essa API é mais moderna e simples:
 
-- `mq_open()`
-- `mq_send()`
-- `mq_receive()`
-- `mq_close()`
-- `mq_unlink()`
+- `mq_open()`.
+- `mq_send()`.
+- `mq_receive()`.
+- `mq_close()`.
+- `mq_unlink()`.
 
 As filas POSIX são identificadas por nomes do tipo `/algum_nome`, e dois processos usam a mesma fila abrindo o mesmo nome com `mq_open()`.
 
-Mensagens são enviadas e recebidas com `mq_send()` e `mq_receive()`.
+As mensagens são enviadas e recebidas com `mq_send()` e `mq_receive()`.
 
-A fila é fechada/removida com `mq_close()` e `mq_unlink()`.
+O descritor da fila é fechado com `mq_close()`, enquanto seu nome é removido com `mq_unlink()`.
 
-## System V Message Queues
+## Filas de mensagens System V
 
 API mais antiga:
 
-- `msgget()`
-- `msgsnd()`
-- `msgrcv()`
-- `msgctl()`
+- `msgget()`.
+- `msgsnd()`.
+- `msgrcv()`.
+- `msgctl()`.
 
 A API System V usa `msgget()` para criar ou obter uma fila, `msgsnd()` para adicionar mensagens e `msgrcv()` para receber mensagens.
 
-## Fluxo Básico POSIX
+## Fluxo básico POSIX
 
 Um processo **produtor** faz:
 
-1. `mq_open()`
-2. `mq_send()`
-3. `mq_close()`
+1. `mq_open()`.
+2. `mq_send()`.
+3. `mq_close()`.
 
 Um processo **consumidor** faz:
 
-1. `mq_open()`
-2. `mq_receive()`
-3. `mq_close()`
-4. `mq_unlink()`
+1. `mq_open()`.
+2. `mq_receive()`.
+3. `mq_close()`.
+4. `mq_unlink()`.
 
 ## Criando uma fila
 
-Em POSIX, a fila tem nome, exemplo `/minha_fila`. Regras importantes:
+Em POSIX, a fila tem um nome, como `/minha_fila`. Algumas regras importantes são:
 
-- começa com `/`.
-- não usa barras adicionais
-- não é `/tmp/fila`
+- O nome começa com `/`.
+- O nome não possui barras adicionais.
+- O nome não é um caminho como `/tmp/fila`.
 
-A fila POSIX não é um arquivo comum no seu diretório. Ela é um objeto IPC do sistema.
+A fila POSIX não é um arquivo comum em um diretório. Ela é um objeto IPC do sistema.
 
 ### Estrutura de atributos
 
@@ -118,7 +118,7 @@ attr.mq_curmsgs = 0;
 
 O exemplo acima diz que a fila pode ter até 10 mensagens e cada mensagem pode ter até 256 bytes.
 
-## Produtor: enviando mensagens
+## Produtor: envio de mensagens
 
 Exemplo `produtor.c`:
 
@@ -211,7 +211,7 @@ int main(void) {
      * Remove a fila do sistema.
      * Faça isso quando ela não for mais necessária.
      */
-    mq_unlink(fila);
+    mq_unlink(QUEUE_NAME);
     return 0;
 }
 ```
@@ -223,13 +223,13 @@ gcc produtor.c -o produtor -lrt
 gcc consumidor.c -o consumidor -lrt
 ```
 
-## O que é `mqd_t`
+## O que é `mqd_t`?
 
-Quando fazemos `mqd_t fila = mq_open(...)`, estamos criando um **descritor da message queue**. Pense nele como o equivalente de um *file descriptor*, mas específico para *POSIX message queue*.
+Quando executamos `mqd_t fila = mq_open(...)`, obtemos um **descritor de fila de mensagens**. Ele é semelhante a um descritor de arquivo, mas é específico para filas de mensagens POSIX.
 
 ## Prioridade das mensagens
 
-POSIX message queues suportam prioridade:
+As filas de mensagens POSIX aceitam prioridades:
 
 ```c
 mq_send(fila, mensagem, tamanho, prioridade);
@@ -264,10 +264,10 @@ int main() {
         return 1;
     }
      
-    // strlen() só retorna o tamanho vísivel da string, precisamos somar +1 para incluir o '\0'
+    // strlen() retorna apenas o tamanho visível da string. Somamos 1 para incluir o '\0'.
     mq_send(fila, "mensagem baixa", strlen("mensagem baixa") + 1, 1);
     mq_send(fila, "mensagem alta", strlen("mensagem alta") + 1, 10);
-    mq_send(fila, "mesagem média", strlen("mensagem média") + 1, 5);
+    mq_send(fila, "mensagem média", strlen("mensagem média") + 1, 5);
 
     char buffer[MSG_SIZE];
     unsigned int prio;
@@ -298,8 +298,8 @@ Recebido: mensagem baixa | prioridade = 1
 
 Por padrão:
 
-- `mq_receive()` bloqueia se a fila estiver cheia
-- `mq_send()` bloqueia se a fila estiver cheia
+- `mq_receive()` bloqueia se a fila estiver vazia.
+- `mq_send()` bloqueia se a fila estiver cheia.
 
 Isso é útil porque o consumidor pode simplesmente esperar trabalho. Exemplo:
 
@@ -307,15 +307,15 @@ Isso é útil porque o consumidor pode simplesmente esperar trabalho. Exemplo:
 mq_receive(fila, buffer, sizeof(buffer), NULL);
 ```
 
-Se não houver mensagem, o processo dorme. O kernel acorda quando alguém enviar uma mensagem.
+Se não houver mensagens, o processo ficará bloqueado. O kernel o acordará quando alguém enviar uma mensagem.
 
-Podemos abrir fila com `O_NONBLOCK` (**modo não bloqueante**). Exemplo:
+Podemos abrir a fila com `O_NONBLOCK` (**modo não bloqueante**). Exemplo:
 
 ```c
 mqd_t fila = mq_open(QUEUE_NAME, O_RDONLY | O_NONBLOCK);
 ```
 
-Agora, se a fila estiver vazia, `mq_receive()` não fica travado. Ele falha imediatamente, exemplo:
+Se a fila estiver vazia, `mq_receive()` não ficará bloqueada: a chamada falhará imediatamente. Exemplo:
 
 ```c
 #include <stdio.h>
@@ -386,9 +386,9 @@ int main() {
 }
 ```
 
-## Uma fila de jobs
+## Uma fila de tarefas
 
-Uma fila onde clientes enviam tarefas e um worker processa.
+Uma fila na qual os clientes enviam tarefas para um *worker* processar.
 
 Mensagem:
 
@@ -501,41 +501,41 @@ Job stop = {-1, "stop"};
 mq_send(fila, (const char*) &stop, sizeof(Job), 10);
 ```
 
-## `mq_close()` vs `mq_unlink()`
+## `mq_close()` e `mq_unlink()`
 
-O `mq_close()` fecha o descritor da fila naquele processo. (`mq_close(fila)`).
+`mq_close()` fecha o descritor da fila no processo: `mq_close(fila)`.
 
-Já o `mq_unlink()` remove o nome da fila do sistema. (`mq_unlink("/fila")`). Se esquecer o `unlink`, pode deixar fila "sobrando" no sistema.
+Já `mq_unlink()` remove o nome da fila do sistema: `mq_unlink("/fila")`. Se não chamarmos essa função, a fila poderá permanecer no sistema sem necessidade.
 
 ## Filas POSIX no Linux
 
-Em Linux, as filas POSIX geralmente aparecem através de um filesystem especial `mqueue`, frequentemente montado em `/dev/mqueue`. Podemos tentar:
+No Linux, as filas POSIX geralmente aparecem por meio de um sistema de arquivos especial chamado `mqueue`, frequentemente montado em `/dev/mqueue`. Podemos consultá-lo com:
 
 ```bash
 ls /dev/mqueue
 ```
 
-## Quando usar Message Queue
+## Quando usar uma fila de mensagens
 
 Use quando:
 
-- Temos mensagens discretas
-- Quer produtor/consumidor
-- Quer fila de tarefas local
-- Quer Prioridade
-- Quer desacoplar envio e processamento
-- Quer evitar criar protocolo de separação de mensagens em stream
+- Temos mensagens discretas.
+- Queremos uma arquitetura de produtor e consumidor.
+- Queremos uma fila de tarefas local.
+- Precisamos definir prioridades.
+- Queremos desacoplar o envio do processamento.
+- Queremos evitar a criação de um protocolo para separar mensagens em um fluxo de bytes.
 
 Bons exemplos:
 
-- Um processo envia jobs para worker
-- Um daemon recebe comandos internos
-- Múltiplos produtores geram eventos
-- Um consumidor processa em ordem/prioridade
+- Um processo envia tarefas para um *worker*.
+- Um *daemon* recebe comandos internos.
+- Múltiplos produtores geram eventos.
+- Um consumidor processa as mensagens em determinada ordem ou prioridade.
 
 Evite quando:
 
-- Precisa de streaming contínuo de dados
-- Precisa de comunicação pela rede
-- Precisa de muitos clientes complexos com resposta individual
-- Precisa alta vazão com dados grandes
+- Precisamos de *streaming* contínuo de dados.
+- Precisamos de comunicação pela rede.
+- Precisamos atender muitos clientes complexos com respostas individuais.
+- Precisamos de alta vazão para dados grandes.

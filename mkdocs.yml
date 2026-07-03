@@ -23,12 +23,12 @@ theme:
     - content.code.copy
 nav:
   - Início: index.md
-  - Fundamentos da Computação:
+  - Fundamentos:
       - Fundamentos de Rede:
           - Primeiros passos: fundamentos/redes/introducao.md
           - Camadas de rede: fundamentos/redes/camadas.md
-  - Estruturas de Dados e Algoritmos:
-      - Arrays: eda/arrays.md
+      - Estruturas de Dados e Algoritmos:
+          - Arrays: eda/arrays.md
   - Linguagens de Programação:
       - C:
           - Ponteiros: c/ponteiros.md
@@ -64,6 +64,8 @@ nav:
           - Pillow: python/pillow.md
           - SQLAlchemy: python/sqlalchemy.md
           - Anotações de tipo: python/types-hints-py.md
+  - Banco de dados:
+      - Visão geral: banco-de-dados/introducao.md
   - DevOps:
       - Docker: devops/docker.md
 markdown_extensions:

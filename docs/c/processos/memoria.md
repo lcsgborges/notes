@@ -164,7 +164,7 @@ int soma(int a, int b) {
 }
 ```
 
-Depois de compilado, isso vira instrução de máquina. Algo conceitualmente parecido com:
+Depois de compilado, isso se transforma em instruções de máquina. O resultado é conceitualmente parecido com:
 
 ```assembly
 mov eax, edi

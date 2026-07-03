@@ -17,7 +17,7 @@ Array:   | 10 | 20 | 30 | 40 | 50 |
 int nums[5];
 ```
 
-Isso cria um array com espaço para 5 inteiros (cada inteiro em C equivale a 4 bytes, portanto, essa estrutura tem 20 bytes).
+Isso cria um array com espaço para cinco inteiros. Se cada `int` ocupar 4 bytes, essa estrutura ocupará 20 bytes.
 
 ## Inicializando um array
 
@@ -25,13 +25,13 @@ Isso cria um array com espaço para 5 inteiros (cada inteiro em C equivale a 4 b
 int nums[5] = {10, 20, 30, 40, 50};
 ```
 
-Isso já cria um array com valores declarados em cada índice (0-4), ou podemos deixar que o compilador descubra o tamanho do array:
+Isso cria um array com valores declarados em cada índice (de 0 a 4). Também podemos deixar que o compilador descubra o tamanho do array:
 
 ```c
 int nums[] = {10, 20, 30, 40, 50};
 ```
 
-Isso também funciona!
+Isso também funciona.
 
 ## Acessando elementos
 
@@ -48,7 +48,7 @@ int nums[5] = {10, 20, 30, 40, 50};
 nums[2] = 99;
 ```
 
-Agora ao imprimir o elemento `nums[2]` teremos `99` e não `30`.
+Agora, ao imprimir o elemento `nums[2]`, teremos `99`, e não `30`.
 
 ## Percorrendo um array
 
@@ -94,13 +94,13 @@ Em C, o nome do array representa o endereço do primeiro elemento:
 numeros == &numeros[0];
 ```
 
-Por isso estas duas expressões são equivalentes:
+Por isso, estas duas expressões são equivalentes:
 
 ```c
 numeros[2]
 ```
 
-e 
+e
 
 ```c
 *(numeros + 2) // Aritmética de ponteiros

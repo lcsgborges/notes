@@ -2,15 +2,15 @@
 
 **Ponteiro** é uma variável que guarda um endereço de memória.
 
-Mas o uso profundo vem de entender três coisas:
+Para compreender o uso de ponteiros, precisamos entender três elementos:
 
-1. valor
-2. endereço
-3. tipo apontado
+1. Valor.
+2. Endereço.
+3. Tipo apontado.
 
-## Variável normal vs Ponteiro
+## Variável comum e ponteiro
 
-Quando escrevemos `int x = 10`, temos uma variável chamada `x`. Ela ocupa um espaço na memória, visualmente:
+Quando escrevemos `int x = 10`, temos uma variável chamada `x`. Ela ocupa um espaço na memória, como representado a seguir:
 
 ```text
 endereço 0x2000
@@ -20,9 +20,8 @@ endereço 0x2000
 +----+
 ```
 
-Agora quando fazemos `int *p = &x;`, temos que `p` é um ponteiro para `int`. Ele guarda o **endereço** de `x`.
+Quando fazemos `int *p = &x;`, `p` é um ponteiro para `int` e guarda o **endereço** de `x`.
 
-```text
 ```text
 endereço 0x2000
 
@@ -120,7 +119,7 @@ Saída:
 x = 99
 ```
 
-Isso porque `*p = 99;` não muda o ponteiro, **muda o valor guardado no endereço apontado por ele. Visualmente:
+Isso ocorre porque `*p = 99;` não muda o ponteiro, mas o valor guardado no endereço apontado por ele. Visualmente:
 
 ```text
 antes:
@@ -242,16 +241,16 @@ Saída:
 x = 99
 ```
 
-Agora passamos o endereço de `x`. A função `mudar()` recebeu `int *p` e alterou `*p = 99`, ou seja, `altere o valor no endereço recebido`.
+Agora, passamos o endereço de `x`. A função `mudar()` recebeu `int *p` e executou `*p = 99`, ou seja, alterou o valor no endereço recebido.
 
-Ponteiro como parâmetro serve para:
+Um ponteiro como parâmetro pode servir para:
 
-- Alterar uma variável externa
-- Evitar cópia grande
-- Preencher resultados
-- Passar arrays
-- Passar structs grandes
-- Permitir retorno indireto
+- Alterar uma variável externa.
+- Evitar uma cópia grande.
+- Preencher resultados.
+- Passar *arrays*.
+- Passar *structs* grandes.
+- Permitir um retorno indireto.
 
 ## Exemplo clássico: `swap`
 
@@ -292,7 +291,7 @@ void dividir(int a, int b, int *quociente, int *resto) {
 int main(void) {
     int q, r;
 
-    dividir (10, 3, &q, &r);
+    dividir(10, 3, &q, &r);
 
     printf("quociente = %d\n", q);
     printf("resto = %d\n", r);
@@ -303,7 +302,7 @@ int main(void) {
 
 ## Ponteiro nulo: `NULL`
 
-Um ponteiro pode não apontar para lugar nenhum.
+Um ponteiro pode não apontar para nenhum objeto.
 
 ```c
 int *p = NULL;
@@ -338,17 +337,17 @@ int *p = NULL;
 *p = 10;
 ```
 
-Isso tenta acessar o endereço zero e normalmente causa `Segmentation fault`.
+Isso tenta acessar o endereço zero e normalmente causa uma falha de segmentação (*segmentation fault*).
 
 ## Ponteiros e arrays
 
-Em C, arrays e ponteiros têm uma relação muito forte.
+Em C, *arrays* e ponteiros têm uma relação estreita.
 
 ```c
 int v[3] = {10, 20, 30};
 ```
 
-`v` geralmente "decai" para ponteiro para o primeiro elemento. `v` em muitos contextos equivale a: `&v[0]`. Exemplo:
+`v` geralmente "decai" para um ponteiro para o primeiro elemento. Em muitos contextos, `v` equivale a `&v[0]`. Exemplo:
 
 ```c
 #include <stdio.h>
@@ -374,7 +373,7 @@ int v[3] = {10, 20, 30};
 int *p = v;
 ```
 
-Então temos que `*p` é `v[0]`. E `*(p + 1)` é `v[1]`. E `*(p + 2)` é `v[2]`. Exemplo:
+Então, `*p` é `v[0]`, `*(p + 1)` é `v[1]` e `*(p + 2)` é `v[2]`. Exemplo:
 
 ```c
 #include <stdio.h>
@@ -400,7 +399,7 @@ Saída:
 30
 ```
 
-Importante saber que `(p + 1)` significa "próximo int", pois o array é de inteiros. Se `int` ocupa 4 bytes, `p + 1` avança 4 bytes.
+É importante saber que `(p + 1)` significa "próximo `int`", pois o *array* é de inteiros. Se um `int` ocupar 4 bytes, `p + 1` avançará 4 bytes.
 
 ## `v[i]` é açúcar sintático
 
@@ -454,11 +453,11 @@ int main(void) {
 
 A função não recebe o array inteiro. Ela recebe um ponteiro para o primeiro elemento. Por isso, precisa receber também o tamanho.
 
-Não precisamos passar o `&numeros`, pois vimos que `&x[0]` equivale a `x`.
+Não precisamos passar `&numeros[0]`, pois vimos que, nesse contexto, `numeros` equivale a `&numeros[0]`.
 
 ## Strings são arrays de `char`
 
-Em C, string é um array de `char` terminado com `'\0'`.
+Em C, uma *string* é um *array* de `char` terminado com `'\0'`.
 
 ```c
 char nome[] = "Lucas";
@@ -506,7 +505,7 @@ Lucas
 char nome[] = "Lucas";
 ```
 
-Aqui o compilador cria um array local com os caracteres. Podemos modificar:
+Aqui, o compilador cria um *array* local com os caracteres. Podemos modificá-lo:
 
 ```c
 nome[0] = 'M';
@@ -520,7 +519,7 @@ Resultado: `Mucas`.
 char *nome = "Lucas";
 ```
 
-Aqui `nome` aponta para uma string literal, geralmente armazenada em região somente leitura. Tentar modificar é comportamento indefinido.
+Aqui, `nome` aponta para uma *string* literal, geralmente armazenada em uma região de somente leitura. Tentar modificá-la causa um comportamento indefinido.
 
 Forma correta para literal:
 
@@ -570,8 +569,8 @@ int *const p = &x;
 
 Significa:
 
-- Não posso mudar `p` para apontar para outro lugar
-- Mas posso alterar o valor apontado
+- Não posso mudar `p` para apontar para outro lugar.
+- Posso alterar o valor apontado.
 
 ```c
 int x = 10;
@@ -592,8 +591,8 @@ const int *const p = &x;
 
 Significa:
 
-- Não posso mudar `p`
-- Não posso mudar `*p`
+- Não posso mudar `p`.
+- Não posso mudar `*p`.
 
 ### Regras para ler declarações com `const`
 
@@ -638,7 +637,7 @@ Para acessar campos:
 (*ptr).id
 ```
 
-Mas isso não é usado. C criou o operador `->`:
+Essa forma é pouco usada. C oferece o operador `->`:
 
 ```c
 ptr->id
@@ -656,7 +655,7 @@ typedef struct {
 
 int main(void) {
     Pessoa p = {1, "Lucas"};
-    pessoa *ptr = &p;
+    Pessoa *ptr = &p;
 
     printf("ID: %d\n", ptr->id);
     printf("Nome: %s\n", ptr->nome);
@@ -671,18 +670,18 @@ int main(void) {
 
 ## Passando struct para função
 
-Se passarmos struct por valor, copia a struct inteira.
+Se passarmos uma *struct* por valor, copiaremos toda a estrutura.
 
 ```c
-void imprimir (Pessoa p) {
+void imprimir(Pessoa p) {
     printf("%s\n", p.nome);
 }
 ```
 
-Para structs grandes, melhor passar ponteiro:
+Para *structs* grandes, é melhor passar um ponteiro:
 
 ```c
-void imprimir (const Pessoa *p) {
+void imprimir(const Pessoa *p) {
     printf("%s\n", p->nome);
 }
 ```
@@ -729,7 +728,7 @@ int main(void) {
 
 ## Retornando ponteiros de função
 
-Uma função pode retornar ponteiro. Mas precisamos saber **para onde esse ponteiro aponta**.
+Uma função pode retornar um ponteiro, mas precisamos saber **para onde esse ponteiro aponta**.
 
 ### Errado: retornar endereço de variável local
 
@@ -740,7 +739,7 @@ int *criar_numero(void) {
 }
 ```
 
-`x` está na stack da função. Quando a função termina, `x` deixa de existir. O ponteiro fica pendurado, isso se chama `dangling pointer`.
+`x` está na pilha da função. Quando a função termina, `x` deixa de existir. O ponteiro fica pendente; isso é chamado de *dangling pointer*.
 
 ### Correto: retornar ponteiro para heap
 
@@ -773,4 +772,4 @@ int main(void) {
 }
 ```
 
-Aqui a memória continua existindo depois que a função termina porque foi alocada no heap. Mas agora quem chama precisar liberar: `free(n)`.
+Aqui, a memória continua existindo depois que a função termina porque foi alocada no *heap*. Entretanto, quem chama a função precisa liberá-la com `free(n)`.

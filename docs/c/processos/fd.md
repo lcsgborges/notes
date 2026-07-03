@@ -178,13 +178,13 @@ Se não fecharmos descritores que deixaram de ser necessários, o processo poder
 
 ### EOF
 
-A chamada `read()` retorna quantidade de bytes lidos:
+A chamada `read()` retorna a quantidade de bytes lidos:
 
 - `> 0`: quantidade de bytes lidos.
 - `= 0`: fim do arquivo (EOF).
 - `-1`: erro, com detalhes em `errno`.
 
-Exemplo de código lendo até o fim do arquivo:
+Exemplo de código que lê até o fim do arquivo:
 
 ```c
 #include <stdio.h>

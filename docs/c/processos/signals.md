@@ -46,7 +46,7 @@ Opção 3: executar uma função tratadora
 
 `SIGKILL` e `SIGSTOP` não podem ser bloqueados, ignorados nem capturados, pois o sistema precisa conseguir terminar ou suspender um processo de forma definitiva.
 
-Então para matar um processo imediatamente:
+Então, para encerrar um processo imediatamente:
 
 ```bash
 kill -KILL PID

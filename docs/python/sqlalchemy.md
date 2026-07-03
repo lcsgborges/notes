@@ -173,7 +173,7 @@ with engine.connect() as conn:
 
 ### Esquemas e tipos
 
-Os metadados das tabelas podem ser descritos por schemas, como os nomes das colunas e seus respectivos tipos.
+Os metadados das tabelas podem ser descritos por esquemas, como os nomes das colunas e seus respectivos tipos.
 
 Exemplo 7:
 
@@ -199,7 +199,7 @@ metadata.create_all(engine)
 
 ### Reflexão
 
-As funções de inspeção podem ser usadas na construção de schemas para carregar os metadados de um banco que já existe:
+As funções de inspeção podem ser usadas na construção de esquemas para carregar os metadados de um banco que já existe:
 
 Exemplo 8:
 
@@ -221,7 +221,7 @@ Até o momento, todas as operações foram feitas com `text()` e SQL bruto. O **
 - **DQL** (*Data Query Language*): consultas.
 - **DML** (*Data Manipulation Language*): inserções, atualizações e exclusões.
 
-Esses recursos são usados em conjunto com os schemas.
+Esses recursos são usados em conjunto com os esquemas.
 
 #### DQL
 

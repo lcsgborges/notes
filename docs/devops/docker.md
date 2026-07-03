@@ -29,7 +29,7 @@ flowchart LR
     U[Usuário ou CI] --> C[docker / docker compose]
     C --> A[Docker API]
     A --> D[dockerd]
-    D --> O[Objetos Docker<br/>imagens, containers, redes, volumes]
+    D --> O[Objetos Docker<br/>imagens, contêineres, redes, volumes]
     D <--> R[Registry<br/>Docker Hub ou privado]
     D --> B[BuildKit / buildx]
     D --> CT[containerd]
@@ -54,14 +54,14 @@ flowchart TD
     E --> F[Store local ou registry]
     F --> G[docker run]
     G --> H[Pull se necessário]
-    H --> I[Criação do container]
+    H --> I[Criação do contêiner]
     I --> J[Camada gravável]
     I --> K[Namespaces e cgroups]
     I --> L[Volumes e rede]
     K --> M[PID 1 executa o processo]
 ```
 
-O builder processa o Dockerfile e o contexto, gera camadas reutilizáveis por cache e produz uma imagem identificável por tag e digest. No `docker run`, o Engine cria o container, aloca uma camada gravável final e configura namespaces, cgroups, rede e mounts antes de iniciar o processo principal.
+O *builder* processa o Dockerfile e o contexto, gera camadas reutilizáveis por *cache* e produz uma imagem identificável por *tag* e *digest*. No `docker run`, o Engine cria o contêiner, aloca uma camada gravável final e configura *namespaces*, *cgroups*, rede e pontos de montagem antes de iniciar o processo principal.
 
 Exemplo de um Dockerfile simples:
 
@@ -97,7 +97,7 @@ Geralmente, os comandos relacionados a imagens no Docker são executados com `do
 
 ## Execução de contêineres
 
-Quando fazemos `docker run`, ele baixa a imagem se ela ainda não existe localmente, cria o container, aloca a camada gravável final, configura a rede e então inicia o processo principal.
+Quando executamos `docker run`, o Docker baixa a imagem caso ela ainda não exista localmente, cria o contêiner, aloca a camada gravável final, configura a rede e, então, inicia o processo principal.
 
 ```bash
 docker run --name web -d -p 8080:80 nginx:alpine
@@ -119,6 +119,6 @@ Dados que precisam sobreviver à remoção do contêiner não devem depender de 
 
 | Tipo | Persiste após parar ou remover o contêiner? | Onde vive | Melhor uso | Observações |
 | :--- | :------------------------------------: | :-------: | :--------: | ----------: |
-| Named volume | Sim | Área gerenciada pelo Docker no host | Dados duráveis de aplicações, bancos e compartilhamentos entre containers | É o mecanismo preferido para persistência; o acesso direto ao diretório no host é desencorajado |
-| Bind mount | Sim, porque aponta para um caminho do host | Caminho escolhido no host | Código-fonte, configurações, artefatos e integração entre o ambiente de desenvolvimento e o host | Por padrão, é gravável e acopla o container à estrutura do host; pode ocultar conteúdo preexistente no destino |
-| tmpfs | Não | Memória do host | Dados temporários, sensíveis ou que não precisam persistir | É exclusivo do Linux no Docker Engine; pode ir para a área de swap e desaparece ao parar o container |
+| Named volume | Sim | Área gerenciada pelo Docker no *host* | Dados duráveis de aplicações, bancos e compartilhamentos entre contêineres | É o mecanismo preferido para persistência; o acesso direto ao diretório no *host* é desencorajado |
+| Bind mount | Sim, porque aponta para um caminho do *host* | Caminho escolhido no *host* | Código-fonte, configurações, artefatos e integração entre o ambiente de desenvolvimento e o *host* | Por padrão, é gravável e acopla o contêiner à estrutura do *host*; pode ocultar conteúdo preexistente no destino |
+| tmpfs | Não | Memória do *host* | Dados temporários, sensíveis ou que não precisam persistir | É exclusivo do Linux no Docker Engine; pode ir para a área de *swap* e desaparece ao parar o contêiner |

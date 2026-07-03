@@ -4,17 +4,17 @@ Um **pipe** é um canal de comunicação que o kernel usa para transportar bytes
 
 > IPC significa *interprocess communication*, ou comunicação entre processos. Um *pipe* é um mecanismo de IPC.
 
-Um pipe é utilizado para enviar dados entre processos. No shell é muito simples ver isso:
+Um *pipe* é utilizado para enviar dados entre processos. No *shell*, é muito simples observar seu funcionamento:
 
 ```bash
 ls | grep '\.c$'
 ```
 
-Esse `|` é um pipe. O `ls` escreve no pipe e o `grep` lê do pipe.
+Esse `|` representa um *pipe*. O `ls` escreve no *pipe*, e o `grep` lê os dados dele.
 
 ## *Pipe* anônimo
 
-O pipe mais básico é o **anonymous pipe**. Ele não tem nome no sistema de arquivos e normalmente é usado entre processos relacionados, principalmente entre pai e filho após um `fork()`.
+O tipo mais básico é o ***pipe* anônimo** (*anonymous pipe*). Ele não tem nome no sistema de arquivos e normalmente é usado entre processos relacionados, principalmente entre pai e filho após um `fork()`.
 
 ```c
 int fd[2];
@@ -170,7 +170,7 @@ O fluxo é o seguinte:
 
 ## Exemplo 3: ler até o EOF
 
-Esse é um exemplo mais realista: o pai escreve várias mensagens e fecha o pipe. O filho lê até acabar.
+Este é um exemplo mais realista: o pai escreve várias mensagens e fecha o *pipe*. O filho lê até o fim.
 
 ```c
 #include <stdio.h>
@@ -256,9 +256,9 @@ O `close(fd[1])` no pai é fundamental. Sem ele, ainda existiria uma extremidade
 
 ## Comportamento do pipe
 
-- Se o *pipe* está vazio, mas ainda existe alguma extremidade de escrita aberta: **`read()` bloqueia**.
-- Se o pipe está vazio e ninguém mais pode escrever: **`read()` retorna 0** (isso significa EOF).
-- Se escrevemos em um *pipe* sem leitores: o processo recebe `SIGPIPE`, que, por padrão, encerra o processo. Se o sinal for ignorado ou tratado, `write()` falha com `EPIPE`.
+- Se o *pipe* estiver vazio, mas ainda existir alguma extremidade de escrita aberta, **`read()` bloqueará**.
+- Se o *pipe* estiver vazio e ninguém mais puder escrever, **`read()` retornará 0**, o que significa EOF.
+- Se escrevermos em um *pipe* sem leitores, o processo receberá `SIGPIPE`, que, por padrão, o encerrará. Se o sinal for ignorado ou tratado, `write()` falhará com `EPIPE`.
 
 Exemplo:
 
@@ -273,7 +273,7 @@ Depois que `head` lê as dez primeiras linhas, ele fecha sua extremidade do *pip
 
 ## Pipe como fluxo de bytes
 
-O pipe não preserva "mensagens" do jeito que queremos. Para isso, precisamos criar protocolos, por exemplo:
+O *pipe* é um fluxo de bytes e não preserva os limites entre mensagens. Para defini-los, precisamos criar um protocolo. Por exemplo:
 
 - Fazer cada mensagem terminar com `\n`.
 - Reservar os primeiros quatro bytes para indicar o tamanho da mensagem.

@@ -170,7 +170,7 @@ Uma função comum, como `int soma(int a, int b) { return a + b; }`, executa int
 5. Executar a operação solicitada.
 6. Voltar ao espaço do usuário.
 
-Essas etapas custam mais ciclos de CPU que uma chamada de função comum. Recursos como o *buffer* da `glibc` podem reduzir chamadas de sistema desnecessárias.
+Essas etapas custam mais ciclos de CPU do que uma chamada de função comum. Recursos como o *buffer* da `glibc` podem reduzir chamadas de sistema desnecessárias.
 
 ### glibc
 
