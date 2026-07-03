@@ -96,7 +96,7 @@ p = 0x7ffd...
 *p = 10
 ```
 
-## Alterando valor através de ponteiro
+## Alterando um valor por meio de um ponteiro
 
 ```c
 #include <stdio.h>
@@ -495,7 +495,7 @@ u
 Lucas
 ```
 
-## `char nome[]` vs `char *nome`
+## `char nome[]` e `char *nome`
 
 > Essa diferença é importante!
 

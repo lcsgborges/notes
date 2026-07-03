@@ -12,7 +12,7 @@ Os dois principais motivos são:
 ### Programação em memória compartilhada (OpenMP e Cilk)
 
 - Programação usando processos ou threads.
-- Decomposição do domínio ou funcional com granularidade fina, média ou grossa.
+- Decomposição do trabalho por domínio ou função, com granularidade fina, média ou grossa.
 - Comunicação por meio de **memória compartilhada**.
 - Sincronização por meio de mecanismos de exclusão mútua.
 

@@ -1,20 +1,20 @@
-# TCP Sockets
+# Soquetes TCP
 
-Processos se encontram por IP + Porta, exemplo: `127.0.0.1:8080`. O socket continua sendo um `file descriptor` criado pelo kernel. A diferença é que agora a comunicação pode ser:
+Os processos se comunicam por meio de um endereço IP e de uma porta, como em `127.0.0.1:8080`. O *socket* continua sendo representado por um descritor de arquivo criado pelo kernel. A diferença é que, agora, a comunicação pode ocorrer:
 
-- Na mesma máquina
-- Entre máquinas diferentes da mesma rede
-- Pela internet
+- Na mesma máquina.
+- Entre máquinas diferentes da mesma rede.
+- Pela internet.
 
-## O que é TCP Socket
+## O que é um *socket* TCP?
 
-Um **TCP Socket** é uma ponta de comunicação usando o protocolo **TCP** (Transmission Control Protocol). Ele oferece uma comunicação:
+Um ***socket* TCP** é uma extremidade de comunicação que usa o **TCP** (*Transmission Control Protocol*). Ele oferece uma comunicação:
 
-- Conectada
-- Bidirecional
-- Confiável
-- Ordenada
-- Em fluxo de bytes (stream)
+- Conectada.
+- Bidirecional.
+- Confiável.
+- Ordenada.
+- Baseada em um fluxo de bytes (*stream*).
 
 Ou seja:
 
@@ -26,18 +26,18 @@ Ou seja:
     A <-.-> B <-.-> C
 ```
 
-O TCP tenta garantir que os bytes enviados de um lado cheguem do outro lado na mesma ordem.
+O TCP garante que os bytes entregues ao destino sejam apresentados na mesma ordem em que foram enviados.
 
-## Endereço TCP: IP + Porta
+## Endereço TCP: IP e porta
 
-No Unix Domain Socket, o endereço era uma arquivo, exemplo: `/tmp/app.sock`. No TCP, o endereço é `IP + Porta`. Exemplos:
+Em um soquete de domínio Unix, o endereço pode ser um caminho, como `/tmp/app.sock`. No TCP, o endereço é composto por um IP e uma porta. Exemplos:
 
-- `127.0.0.1:3000`
-- `192.168.22.46:8000`
+- `127.0.0.1:3000`.
+- `192.168.22.46:8000`.
 
 ### IP
 
-Identifica uma **máquina/interface** na rede. Exemplo: `192.168.22.40`.
+Identifica uma **interface de rede**. Exemplo: `192.168.22.40`.
 
 ### Porta
 
@@ -52,72 +52,73 @@ Identifica o **serviço** na máquina. Exemplos:
 | 6379 | `Redis` |
 | 8000 | Muito usada em desenvolvimento |
 
-Então, `127.0.0.1:8000`, significa:
+Portanto, `127.0.0.1:8000` significa:
 
-> Conectar na própria máquina (localhost), no serviço que está escutando na porta 8000.
+> Conectar-se à própria máquina (*localhost*), no serviço que está em escuta na porta 8000.
 
 
-## Unix Domain Socket vs TCP Socket
+## Soquete de domínio Unix e soquete TCP
 
-| Característica | Unix Domain Socket | TCP Socket |
+| Característica | Soquete de domínio Unix | Soquete TCP |
 | :------------: | :----------------: | :--------: |
 | Comunicação | Mesma máquina | Mesma máquina ou rede |
-| Endereço | Caminho, ex: `/tmp/app.sock` | IP + Porta |
+| Endereço | Caminho, como `/tmp/app.sock` | IP e porta |
 | Família | `AF_UNIX` | `AF_INET` ou `AF_INET6` |
 | Estrutura | `sockaddr_un` | `sockaddr_in` ou `sockaddr_in6` |
-| Uso comum | daemon local, Docker, PostgreSQL local | Servidores web, APIs, banco remoto |
+| Uso comum | *Daemon* local, Docker e PostgreSQL local | Servidores *web*, APIs e banco remoto |
 | Acesso remoto | Não | Sim |
 
-No código, a principal mudança é essa:
+No código, a principal mudança é esta:
 
 ```c
-// Unix Domain Socket
+// Soquete de domínio Unix.
 int unix_sockfd = socket(AF_UNIX, SOCK_STREAM, 0);
 
-// TCP Socket
+// Soquete TCP.
 int tcp_sockfd = socket(AF_INET, SOCK_STREAM, 0);
 ```
 
 ## Fluxo de um servidor TCP
 
-Um servidor TCP faz:
+Um servidor TCP executa as seguintes operações:
 
-1. `socket()`
-2. `bind()`
-3. `listen()`
-4. `accept()`
-5. `read()`/`write()`
-6. `close()`
+1. `socket()`.
+2. `bind()`.
+3. `listen()`.
+4. `accept()`.
+5. `read()` e `write()`.
+6. `close()`.
 
-Mesma ideia do Unix Domain Socket, mas agora o `bind()` associa o socket a uma porta e IP local.
+A ideia é a mesma de um soquete de domínio Unix, mas, agora, `bind()` associa o *socket* a um endereço IP local e a uma porta.
 
 Fluxo:
 
-1. `socket()`: cria o socket
-2. `bind()`: associa o socket a um IP e Porta
-3. `listen()`: coloca o socket em modo servidor
-4. `accept()`: espera um cliente conectar
-5. `read()`/`write()`: troca dados com o cliente
-6. `close()`: fecha descritores
+1. `socket()`: cria o *socket*.
+2. `bind()`: associa o *socket* a um IP e a uma porta.
+3. `listen()`: coloca o *socket* no modo de escuta.
+4. `accept()`: espera que um cliente se conecte.
+5. `read()` e `write()`: trocam dados com o cliente.
+6. `close()`: fecha os descritores.
 
 ## Fluxo de um cliente TCP
 
-1. `socket()`
-2. `connect()`
-3. `write()`/`read()`
-4. `close()`
+1. `socket()`.
+2. `connect()`.
+3. `write()`.
+4. `read()`.
+5. `close()`.
 
 Fluxo:
 
-1. `socket`: cria o socket
-2. `connect()`: conecta no IP e porta do servidor
-3. `write()`: envia dados
-4. `read()`: recebe resposta
-5. `close()`: fecha a conexão
+1. `socket()`: cria o *socket*.
+2. `connect()`: conecta-se ao IP e à porta do servidor.
+3. `write()`: envia dados.
+4. `read()`: recebe a resposta.
+5. `close()`: fecha a conexão.
 
 ## A estrutura `sockaddr_in`
 
-Para **IPv4** usamos:
+Para **IPv4**, usamos:
 
 ```c
 struct sockaddr_in
@@ -135,7 +136,7 @@ addr.sin_addr.s_addr = INADDR_ANY;
 
 ### `sin_family`
 
-Representa a família do endereço: `AF_INET`
+Representa a família do endereço: `AF_INET`.
 
 ### `sin_port`
 
@@ -143,19 +144,19 @@ Representa a porta. Usamos `htons()` para deixar no formato requerido (*big-endi
 
 ### `sin_addr`
 
-Representa o endereço IPv4, no servidor podemos usar `INADDR_ANY`, que significa: **Aceite conexões em qualquer interface de máquina."
+Representa o endereço IPv4. No servidor, podemos usar `INADDR_ANY`, que significa: **aceite conexões em qualquer interface da máquina**.
 
-## 127.0.0.1 vs 0.0.0.0
+## `127.0.0.1` e `0.0.0.0`
 
-O `127.0.0.1` escuta só na própria máquina, ou seja, **somente programas locais acessam** (útil para teste).
+Quando um servidor usa `127.0.0.1`, ele aceita conexões apenas da própria máquina, ou seja, **somente programas locais podem acessá-lo**. Isso é útil para testes.
 
-O `0.0.0.0` escuta em todas as interfaces disponíveis, exemplo:
+Quando um servidor usa `0.0.0.0`, ele aceita conexões por todas as interfaces disponíveis. Por exemplo:
 
-- localhost
-- IP da rede local
-- Interfaces disponíveis
+- *Loopback*.
+- Interface da rede local.
+- Outras interfaces disponíveis.
 
-Se sua máquina tem IP `192.168.0.10`, um servidor em `0.0.0.0:8000` pode aceitar conexões de outra máquina de rede, se firewall permitir. No *C*, para servidor:
+Se uma máquina tiver o IP `192.168.0.10`, um servidor em `0.0.0.0:8000` poderá aceitar conexões de outra máquina da rede, se o *firewall* permitir. Em C, usamos no servidor:
 
 ```c
 addr.sin_addr.s_addr = INADDR_ANY;
@@ -191,7 +192,7 @@ int main(void) {
     int opt = 1;
 
     if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1) {
-        perror("setsocketopt");
+        perror("setsockopt");
         close(server_fd);
         return 1;
     }
@@ -215,7 +216,7 @@ int main(void) {
         return 1;
     }
 
-    printf("Server TCP escutando na porta %d...\n", PORT);
+    printf("Servidor TCP escutando na porta %d...\n", PORT);
 
     int client_fd = accept(server_fd, NULL, NULL);
 
@@ -225,7 +226,7 @@ int main(void) {
         return 1;
     }
 
-    printf("Client conectado\n");
+    printf("Cliente conectado.\n");
 
     char buffer[BUFFER_SIZE];
 
@@ -240,9 +241,9 @@ int main(void) {
 
     buffer[n] = '\0';
 
-    printf("Client enviou: %s\n", buffer);
+    printf("Cliente enviou: %s\n", buffer);
 
-    const char *resp = "Mensagem recebida pelo server TCP\n";
+    const char *resp = "Mensagem recebida pelo servidor TCP.\n";
 
     if (write(client_fd, resp, strlen(resp)) == -1) {
         perror("write");
@@ -271,7 +272,7 @@ Arquivo `tcp_client.c`:
 #define PORT 8000
 #define BUFFER_SIZE 1024
 
-int main() {
+int main(void) {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (sockfd == -1) {
@@ -297,7 +298,7 @@ int main() {
         return 1;
     }
 
-    const char *msg = "Olá server TCP";
+    const char *msg = "Olá, servidor TCP!";
 
     if (write(sockfd, msg, strlen(msg)) == -1) {
         perror("write");
@@ -317,7 +318,7 @@ int main() {
 
     buffer[n] = '\0';
 
-    printf("Server respondeu: %s\n", buffer);
+    printf("O servidor respondeu: %s\n", buffer);
 
     close(sockfd);
     return 0;
@@ -356,7 +357,7 @@ Associa o socket a: `0.0.0.0:8000`.
 listen(server_fd, 10);
 ```
 
-Coloca o socket em modo passivo, esperando conexões. O número `10` é o **backlog**, uma fila de conexões pendentes. Significa algo mais próximo de: "Quantas conexões podem ficar aguardando até o servidor chamar `accept()`?".
+Coloca o *socket* no modo passivo, à espera de conexões. O número `10` define o ***backlog***, relacionado à fila de conexões pendentes. Em termos simples, ele limita quantas conexões podem aguardar enquanto o servidor ainda não chamou `accept()`.
 
 ### `accept()`
 
@@ -364,12 +365,12 @@ Coloca o socket em modo passivo, esperando conexões. O número `10` é o **back
 int client_fd = accept(server_fd, NULL, NULL);
 ```
 
-Espera um cliente se conectar. Quando um cliente conecta, `accept()` retorna um **novo file descriptor**.
+Espera que um cliente se conecte. Quando isso acontece, `accept()` retorna um **novo descritor de arquivo**.
 
-- `server_fd`: socket de escuta
-- `client_fd`: socket conectado com um cliente (comunicação)
+- `server_fd`: *socket* de escuta.
+- `client_fd`: *socket* conectado a um cliente.
 
-O servidor troca dados com o cliente usando o `client_fd` apenas.
+O servidor troca dados com o cliente usando apenas `client_fd`.
 
 ### `connect()`
 
@@ -379,7 +380,7 @@ No cliente:
 connect(sockfd, (struct sockaddr *) &server_addr, sizeof(server_addr));
 ```
 
-Pede ao kernel: "Conecte este socket ao servidor `127.0.0.1:8000`. Se o servidor estiver escutando, a conexão é estabelecida.
+Solicita ao kernel: "Conecte este *socket* ao servidor `127.0.0.1:8000`." Se o servidor estiver em escuta, a conexão será estabelecida.
 
 ## TCP é fluxo de bytes
 
@@ -394,19 +395,19 @@ O servidor pode ler `abcdef`. TCP garante ordem dos bytes, mas não garante "uma
 
 ## `inet_pton()`
 
-No cliente usamos:
+No cliente, usamos:
 
 ```c
 inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr);
 ```
 
-Isso converte uma string de IP: `"127.0.0.1"` para a forma binária que o kernel usa em `struct sockaddr_in`.
+Isso converte uma *string* de IP, `"127.0.0.1"`, para a forma binária que o kernel usa em `struct sockaddr_in`.
 
-`inet_pton` significa `presentation to network`. Ou seja: `forma textual -> forma de rede`.
+`inet_pton` significa *presentation to network*, ou seja: `forma textual -> forma de rede`.
 
 ## `send()` e `recv()`
 
-Além do `read()` e `write()`, podemos usar:
+Além de `read()` e `write()`, podemos usar:
 
 ```c
 recv(fd, buffer, tamanho, flags);
@@ -415,5 +416,5 @@ send(fd, buffer, tamanho, flags);
 
 A diferença principal é:
 
-- `read()` e `write()` são genéricos para file descriptors.
-- `recv()` e `send()` são príprios para sockets e aceitam **flags** específicas.
+- `read()` e `write()` são genéricos para descritores de arquivo.
+- `recv()` e `send()` são próprios para *sockets* e aceitam opções (*flags*) específicas.

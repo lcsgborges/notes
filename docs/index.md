@@ -42,10 +42,10 @@ Se você está explorando o conteúdo pela primeira vez, estes são bons pontos 
 - [Sinais](c/processos/signals.md)
 - [Pipes](c/processos/pipes.md)
 - [FIFOs](c/processos/fifos.md)
-- [Message Queues](c/processos/message_queues.md)
-- [Shared Memory](c/processos/shared_memory.md)
-- [Unix Domain Sockets](c/processos/unix_domain_sockets.md)
-- [TCP Sockets](c/processos/tcp_sockets.md)
+- [Filas de mensagens](c/processos/message_queues.md)
+- [Memória compartilhada](c/processos/shared_memory.md)
+- [Soquetes de domínio Unix](c/processos/unix_domain_sockets.md)
+- [Soquetes TCP](c/processos/tcp_sockets.md)
 
 **Concorrência e paralelismo**
 

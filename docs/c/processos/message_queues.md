@@ -315,7 +315,7 @@ Podemos abrir a fila com `O_NONBLOCK` (**modo não bloqueante**). Exemplo:
 mqd_t fila = mq_open(QUEUE_NAME, O_RDONLY | O_NONBLOCK);
 ```
 
-Se a fila estiver vazia, `mq_receive()` não ficará bloqueada: a chamada falhará imediatamente. Exemplo:
+Se a fila estiver vazia, a chamada a `mq_receive()` não ficará bloqueada: ela falhará imediatamente. Exemplo:
 
 ```c
 #include <stdio.h>

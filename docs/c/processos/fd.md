@@ -50,7 +50,7 @@ Esses descritores podem apontar para um terminal, um arquivo ou outro recurso, d
 - `fork()`.
 - Funções da família `exec`.
 
-### stdio.h vs POSIX
+### `stdio.h` e POSIX
 
 | Operações sobre arquivos | stdio.h | POSIX |
 | :----------------------: | :-----: | :---: |

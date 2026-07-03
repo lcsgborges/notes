@@ -255,7 +255,7 @@ mem[0] = 'A';
 strcpy(mem, "texto");
 ```
 
-## `MAP_SHARED` vs `MAP_PRIVATE`
+## `MAP_SHARED` e `MAP_PRIVATE`
 
 - `MAP_SHARED`: alterações são visíveis para outros processos.
 - `MAP_PRIVATE`: alterações são privadas do processo (*copy-on-write*).

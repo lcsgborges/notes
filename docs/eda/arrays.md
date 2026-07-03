@@ -94,13 +94,7 @@ Em C, o nome do array representa o endereço do primeiro elemento:
 numeros == &numeros[0];
 ```
 
-Por isso, estas duas expressões são equivalentes:
-
-```c
-numeros[2]
-```
-
-e
+Por isso, a expressão `numeros[2]` é equivalente a:
 
 ```c
 *(numeros + 2) // Aritmética de ponteiros
